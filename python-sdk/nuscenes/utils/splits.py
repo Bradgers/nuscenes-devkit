@@ -141,11 +141,37 @@ test = \
      'scene-1030', 'scene-1031', 'scene-1032', 'scene-1033', 'scene-1034', 'scene-1035', 'scene-1036', 'scene-1037',
      'scene-1038', 'scene-1039', 'scene-1040', 'scene-1041', 'scene-1042', 'scene-1043']
 
+night = \
+    ['scene-0992', 'scene-0994', 'scene-0995', 'scene-0996', 'scene-0997', 'scene-0998', 'scene-0999', 'scene-1000', 
+     'scene-1001', 'scene-1002', 'scene-1003', 'scene-1004', 'scene-1005', 'scene-1006', 'scene-1007', 'scene-1008', 
+     'scene-1009', 'scene-1010', 'scene-1011', 'scene-1012', 'scene-1013', 'scene-1014', 'scene-1015', 'scene-1016', 
+     'scene-1017', 'scene-1018', 'scene-1019', 'scene-1020', 'scene-1021', 'scene-1022', 'scene-1023', 'scene-1024', 
+     'scene-1025', 'scene-1044', 'scene-1045', 'scene-1046', 'scene-1047', 'scene-1048', 'scene-1049', 'scene-1050', 
+     'scene-1051', 'scene-1052', 'scene-1053', 'scene-1054', 'scene-1055', 'scene-1056', 'scene-1057', 'scene-1058', 
+     'scene-1059', 'scene-1060', 'scene-1061', 'scene-1062', 'scene-1063', 'scene-1064', 'scene-1065', 'scene-1066', 
+     'scene-1067', 'scene-1068', 'scene-1069', 'scene-1070', 'scene-1071', 'scene-1072', 'scene-1073', 'scene-1074', 
+     'scene-1075', 'scene-1076', 'scene-1077', 'scene-1078', 'scene-1079', 'scene-1080', 'scene-1081', 'scene-1082', 
+     'scene-1083', 'scene-1084', 'scene-1085', 'scene-1086', 'scene-1087', 'scene-1088', 'scene-1089', 'scene-1090', 
+     'scene-1091', 'scene-1092', 'scene-1093', 'scene-1094', 'scene-1095', 'scene-1096', 'scene-1097', 'scene-1098', 
+     'scene-1099', 'scene-1100', 'scene-1101', 'scene-1102', 'scene-1104', 'scene-1105', 'scene-1106', 'scene-1107', 
+     'scene-1108', 'scene-1109', 'scene-1110']
+
+night_val = \
+    ['scene-1059', 'scene-1060', 'scene-1061', 'scene-1062', 'scene-1063', 'scene-1064', 'scene-1065', 'scene-1066', 
+     'scene-1067', 'scene-1068', 'scene-1069', 'scene-1070', 'scene-1071', 'scene-1072', 'scene-1073']
+    
+night_wo_hard_val = \
+    ['scene-1059', 'scene-1061', 'scene-1064', 'scene-1068', 'scene-1069', 'scene-1070', 'scene-1071', 'scene-1072', 
+     'scene-1073']
+
 mini_train = \
     ['scene-0061', 'scene-0553', 'scene-0655', 'scene-0757', 'scene-0796', 'scene-1077', 'scene-1094', 'scene-1100']
 
 mini_val = \
     ['scene-0103', 'scene-0916']
+
+mini_night = \
+    ["scene-1077"]
 
 
 def create_splits_logs(split: str, nusc: 'NuScenes') -> List[str]:
@@ -164,7 +190,7 @@ def create_splits_logs(split: str, nusc: 'NuScenes') -> List[str]:
 
     # Check compatibility of split with nusc_version.
     version = nusc.version
-    if split in {'train', 'val', 'train_detect', 'train_track'}:
+    if split in {'train', 'val', 'train_detect', 'train_track', 'night', 'night_val', 'night_wo_hard_val'}:
         assert version.endswith('trainval'), \
             'Requested split {} which is not compatible with NuScenes version {}'.format(split, version)
     elif split in {'mini_train', 'mini_val'}:
@@ -200,8 +226,8 @@ def create_splits_scenes(verbose: bool = False) -> Dict[str, List[str]]:
     # Use hard-coded splits.
     all_scenes = train + val + test
     assert len(all_scenes) == 1000 and len(set(all_scenes)) == 1000, 'Error: Splits incomplete!'
-    scene_splits = {'train': train, 'val': val, 'test': test,
-                    'mini_train': mini_train, 'mini_val': mini_val,
+    scene_splits = {'train': train, 'val': val, 'test': test, 'night': night, 'night_val': night_val, 'night_wo_hard_val': night_wo_hard_val,
+                    'mini_train': mini_train, 'mini_val': mini_val, 'mini_night': mini_night,
                     'train_detect': train_detect, 'train_track': train_track}
 
     # Optional: Print scene-level stats.
