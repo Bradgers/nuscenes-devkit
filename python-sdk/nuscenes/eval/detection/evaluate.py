@@ -111,7 +111,12 @@ class DetectionEval:
         if self.verbose:
             print('Accumulating metric data...')
         metric_data_list = DetectionMetricDataList()
+        nops_classes = []
         for class_name in self.cfg.class_names:
+            npos = len([1 for gt_box in self.gt_boxes.all if gt_box.detection_name == class_name])
+            if npos == 0:
+                nops_classes.append(class_name)
+                continue
             for dist_th in self.cfg.dist_ths:
                 md = accumulate(self.gt_boxes, self.pred_boxes, class_name, self.cfg.dist_fcn_callable, dist_th)
                 metric_data_list.set(class_name, dist_th, md)
@@ -123,6 +128,8 @@ class DetectionEval:
             print('Calculating metrics...')
         metrics = DetectionMetrics(self.cfg)
         for class_name in self.cfg.class_names:
+            if class_name in nops_classes:
+                continue
             # Compute APs.
             for dist_th in self.cfg.dist_ths:
                 metric_data = metric_data_list[(class_name, dist_th)]
